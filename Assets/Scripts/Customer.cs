@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Customer : MonoBehaviour
 {
-    private float patience;
 
     // Start is called before the first frame update
     void Start()
