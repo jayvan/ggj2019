@@ -33,7 +33,7 @@ public class BubbleTeaArea : MonoBehaviour
     {
         get
         {   
-            return bubbleTeaQ.Count == MAX_TEA;
+            return activeTeaCount == MAX_TEA;
         }
     }
 
