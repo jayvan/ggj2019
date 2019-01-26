@@ -7,15 +7,18 @@ public class Customer : MonoBehaviour
 {
     [SerializeField] private Slider patienceSlider;
 
-    private const float PATIENCE_MIN = 10.0f;
-    private const float PATIENCE_MAX = 15.0f;
+    public event System.Action onLeave;
+
+    private const float PATIENCE_MIN = 30.0f;
+    private const float PATIENCE_MAX = 45.0f;
     private float patience;
     private float timeRemaining;
 
     // Start is called before the first frame update
     void Start()
     {
-        patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
+        //patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
+        patience = 1.0f;
         timeRemaining = patience;
     }
 
@@ -34,7 +37,11 @@ public class Customer : MonoBehaviour
 
     private void DestroyCustomer()
     {
-        Destroy(this);
+        if(onLeave != null)
+        {
+            onLeave();
+        }
+        Destroy(this.gameObject);
     }
 
     public void Serve()

@@ -21,16 +21,22 @@ public class CustomerArea : MonoBehaviour {
     }
   }
 
-  public void Serve() {
+  public bool Serve() {
     if (this.customers.Count == 0) {
-      return;
+      return false;
     }
 
     this.customers[0].Serve();
-    this.customers.RemoveAt(0);
+    return true;
   }
 
   private void SpawnCustomer() {
-    this.customers.Add(Instantiate(this.customerPrefab, this.transform, false).GetComponent<Customer>());
+        Customer newCustomer = Instantiate(this.customerPrefab, this.transform, false).GetComponent<Customer>();
+        this.customers.Add(newCustomer);
+        newCustomer.onLeave += () =>
+        {
+            this.customers.Remove(newCustomer);
+        };
   }
+
 }
