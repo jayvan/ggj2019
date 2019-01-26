@@ -527,6 +527,7 @@ MonoBehaviour:
   maxCustomers: 4
   customerPrefab: {fileID: 7719646797330564044, guid: 53ba448fbe0984e8186ee4abd832602f,
     type: 3}
+  menu: {fileID: 11400000, guid: bad38b306bd284f77b6ed2ee899b12cd, type: 2}
 --- !u!114 &1303370383
 MonoBehaviour:
   m_ObjectHideFlags: 0

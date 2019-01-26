@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Customer : MonoBehaviour
 {
@@ -18,8 +21,8 @@ public class Customer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
-        patience = 1.0f;
+        patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
+//        patience = 1.0f;
         timeRemaining = patience;
     }
 
@@ -49,8 +52,17 @@ public class Customer : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public void Serve()
+    public bool Serve(Food.FoodType food)
     {
-        DestroyCustomer();
+      if (this.demands.Contains(food)) {
+        this.demands.Remove(food);
+        if (this.demands.Count == 0) {
+          DestroyCustomer();
+        }
+
+        return true;
+      }
+
+      return false;
     }
 }

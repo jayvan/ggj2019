@@ -6,6 +6,7 @@ public class CustomerArea : MonoBehaviour {
   [SerializeField] private float maxTimeBetweenCustomers;
   [SerializeField] private int maxCustomers;
   [SerializeField] private GameObject customerPrefab;
+  [SerializeField] private Menu menu;
 
   private float timeToNextCustomer = 1f;
   List<Customer> customers = new List<Customer>();
@@ -21,22 +22,24 @@ public class CustomerArea : MonoBehaviour {
     }
   }
 
-  public bool Serve() {
-    if (this.customers.Count == 0) {
-      return false;
+  public bool Serve(Food.FoodType food) {
+    foreach (Customer customer in this.customers) {
+      if (customer.Serve(food)) {
+        return true;
+      }
     }
 
-    this.customers[0].Serve();
-    return true;
+    return false;
   }
 
   private void SpawnCustomer() {
         Customer newCustomer = Instantiate(this.customerPrefab, this.transform, false).GetComponent<Customer>();
+        newCustomer.SetDemands(this.menu.Random(3));
+
         this.customers.Add(newCustomer);
         newCustomer.onLeave += () =>
         {
             this.customers.Remove(newCustomer);
         };
   }
-
 }
