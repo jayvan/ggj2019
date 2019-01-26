@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class Customer : MonoBehaviour
 {
     [SerializeField] private Slider patienceSlider;
+    [SerializeField] private GameObject bubbleTea;
+    [SerializeField] private GameObject shavedIce;
+    [SerializeField] private GameObject orderBox;
 
     public event System.Action onLeave;
 
@@ -13,13 +16,26 @@ public class Customer : MonoBehaviour
     private const float PATIENCE_MAX = 45.0f;
     private float patience;
     private float timeRemaining;
+
     private List<Food.FoodType> demands;
+    private Dictionary<Food.FoodType, GameObject> foodDictionary;
 
     // Start is called before the first frame update
     void Start()
     {
-        //patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
-        patience = 1.0f;
+        foodDictionary = new Dictionary<Food.FoodType, GameObject>();
+        foreach (Food.FoodType food in System.Enum.GetValues(typeof(Food.FoodType)))
+        {
+            if(food == Food.FoodType.BubbleTea)
+            {
+                foodDictionary.Add(food, bubbleTea);
+            } 
+            else if(food == Food.FoodType.ShavedIce)
+            {
+                foodDictionary.Add(food, shavedIce);
+            }
+        }
+        patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
         timeRemaining = patience;
     }
 
@@ -36,9 +52,13 @@ public class Customer : MonoBehaviour
         }
     }
 
-  public void SetDemands(List<Food.FoodType> demands) {
-    this.demands = demands;
-  }
+    public void SetDemands(List<Food.FoodType> demands) {
+        this.demands = demands;
+
+        foreach (Food.FoodType food in demands) {
+            GameObject newFood = (GameObject)Instantiate(foodDictionary[food], gameObject.transform, false);
+        }
+    }
 
     private void DestroyCustomer()
     {
