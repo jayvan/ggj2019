@@ -13,6 +13,7 @@ public class Customer : MonoBehaviour
     private const float PATIENCE_MAX = 45.0f;
     private float patience;
     private float timeRemaining;
+    private List<Food.FoodType> demands;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,10 @@ public class Customer : MonoBehaviour
             DestroyCustomer();
         }
     }
+
+  public void SetDemands(List<Food.FoodType> demands) {
+    this.demands = demands;
+  }
 
     private void DestroyCustomer()
     {
