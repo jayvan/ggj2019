@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Customer : MonoBehaviour
 {
@@ -10,6 +13,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private GameObject shavedIce;
     [SerializeField] private GameObject orderBox;
 
+
     public event System.Action onLeave;
 
     private const float PATIENCE_MIN = 30.0f;
@@ -17,24 +21,29 @@ public class Customer : MonoBehaviour
     private float patience;
     private float timeRemaining;
 
-    private List<Food.FoodType> demands;
     private Dictionary<Food.FoodType, GameObject> foodDictionary;
+    private List<Food.FoodType> demands;
+    private List<GameObject> displayedDemands = new List<GameObject>();
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         foodDictionary = new Dictionary<Food.FoodType, GameObject>();
         foreach (Food.FoodType food in System.Enum.GetValues(typeof(Food.FoodType)))
         {
-            if(food == Food.FoodType.BubbleTea)
+            if (food == Food.FoodType.BubbleTea)
             {
                 foodDictionary.Add(food, bubbleTea);
-            } 
-            else if(food == Food.FoodType.ShavedIce)
+            }
+            else if (food == Food.FoodType.ShavedIce)
             {
                 foodDictionary.Add(food, shavedIce);
             }
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
         timeRemaining = patience;
     }
@@ -56,7 +65,8 @@ public class Customer : MonoBehaviour
         this.demands = demands;
 
         foreach (Food.FoodType food in demands) {
-            GameObject newFood = (GameObject)Instantiate(foodDictionary[food], gameObject.transform, false);
+            GameObject newFood = (GameObject)Instantiate(foodDictionary[food], orderBox.transform, false);
+            displayedDemands.Add(newFood);
         }
     }
 
@@ -69,8 +79,22 @@ public class Customer : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public void Serve()
+    public bool Serve(Food.FoodType food)
     {
-        DestroyCustomer();
+        if (this.demands.Contains(food)) {
+            int index = this.demands.IndexOf(food);
+            this.demands.Remove(food);
+
+            // need way to show it has been served before removing from this list
+            this.displayedDemands.RemoveAt(index);
+
+            if (this.demands.Count == 0) {
+                DestroyCustomer();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

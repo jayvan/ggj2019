@@ -48,7 +48,7 @@ public class BubbleTeaArea : MonoBehaviour
 
     public void RemoveTea()
     {
-        if(activeTeaCount > 0 && this.customerArea.Serve())
+        if(activeTeaCount > 0 && this.customerArea.Serve(Food.FoodType.BubbleTea))
         {
             bubbleTeaQ[--activeTeaCount].SetActive(false);
         }
