@@ -25,6 +25,15 @@ public class CustomerArea : MonoBehaviour {
   public bool Serve(Food.FoodType food) {
     foreach (Customer customer in this.customers) {
       if (customer.Serve(food)) {
+        if (customer.GetDemandCount() == 0) {
+
+          if(!customer.HasGoodRelationship()) {
+            customer.DestroyCustomer();
+          } else {
+            // take this out and replace with something else to store customer
+            customer.DestroyCustomer();
+          }
+        }
         return true;
       }
     }
@@ -32,7 +41,7 @@ public class CustomerArea : MonoBehaviour {
     return false;
   }
 
-  private void SpawnCustomer() {
+    private void SpawnCustomer() {
         Customer newCustomer = Instantiate(this.customerPrefab, this.transform, false).GetComponent<Customer>();
         newCustomer.SetDemands(this.menu.Random(3));
 

@@ -524,7 +524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minTimeBetweenCustomers: 5
   maxTimeBetweenCustomers: 10
-  maxCustomers: 4
+  maxCustomers: 1
   customerPrefab: {fileID: 1873459738890934738, guid: b23d38974b14a402fa0b91babf5a9340,
     type: 3}
   menu: {fileID: 11400000, guid: bad38b306bd284f77b6ed2ee899b12cd, type: 2}

@@ -13,13 +13,13 @@ public class Customer : MonoBehaviour
     [SerializeField] private GameObject shavedIce;
     [SerializeField] private GameObject orderBox;
 
-
     public event System.Action onLeave;
 
     private const float PATIENCE_MIN = 30.0f;
     private const float PATIENCE_MAX = 45.0f;
     private float patience;
     private float timeRemaining;
+    private float relationshipScore;
 
     private Dictionary<Food.FoodType, GameObject> foodDictionary;
     private List<Food.FoodType> demands;
@@ -45,6 +45,7 @@ public class Customer : MonoBehaviour
     void Start()
     {
         patience = Random.Range(PATIENCE_MIN, PATIENCE_MAX);
+        relationshipScore = 2;
         timeRemaining = patience;
     }
 
@@ -70,15 +71,6 @@ public class Customer : MonoBehaviour
         }
     }
 
-    private void DestroyCustomer()
-    {
-        if(onLeave != null)
-        {
-            onLeave();
-        }
-        Destroy(this.gameObject);
-    }
-
     public bool Serve(Food.FoodType food)
     {
         if (this.demands.Contains(food)) {
@@ -89,12 +81,43 @@ public class Customer : MonoBehaviour
             this.displayedDemands.RemoveAt(index);
 
             if (this.demands.Count == 0) {
-                DestroyCustomer();
+                UpdateRelationship();
             }
 
             return true;
         }
 
         return false;
+    }
+
+    public bool HasGoodRelationship()
+    {
+      return relationshipScore > 0;
+    }
+
+    public int GetDemandCount()
+    {
+        return demands.Count;
+    }
+
+    private void UpdateRelationship()
+    {
+        if (timeRemaining >= patience / 2)
+        {
+            relationshipScore++;
+        }
+        else
+        {
+            relationshipScore--;
+        }
+    }
+
+    public void DestroyCustomer()
+    {
+        if (onLeave != null)
+        {
+            onLeave();
+        }
+        Destroy(this.gameObject);
     }
 }
